@@ -12,6 +12,9 @@ typedef struct ListaExcursao{
     char nomeExcursao[50];
     char destino[50];
     int numDias;
+    int dataDia;
+    int dataMes;
+    int dataAno;
     struct ListaExcursao *proxExcursao;
     tipoTurista *inicioLista;
 }tipoExcursao;
@@ -116,7 +119,7 @@ int adicionarTurista(char nomeExcursao[50],char nomeTurista[50], char cpf[50], c
     if(listaEnc == NULL){
         return 0;
     }
-    while(!strcmp(atual->nomeExcursao, nomeExcursao)){
+    while(strcmp(atual->nomeExcursao, nomeExcursao)!= 0){
         atual = atual->proxExcursao;
     }
 
@@ -126,8 +129,16 @@ int adicionarTurista(char nomeExcursao[50],char nomeTurista[50], char cpf[50], c
     }
     strcpy(novoTurista->nome, nomeTurista);
     strcpy(novoTurista->cpf, cpf);
+
+    if(listaEnc->inicio->inicioLista == NULL){
     novoTurista->ProxNo = NULL;
     atual->inicioLista = novoTurista;
+    atual->inicioLista->quantidadeTurista++;
+    return 1;
+    }
+    novoTurista->ProxNo = atual->inicioLista;
+    atual->inicioLista = novoTurista;
+    atual->inicioLista->quantidadeTurista++;
 
     return 1;
 }
@@ -136,10 +147,29 @@ void mostrar(controlMutilista *listaEnc){
     tipoExcursao *atual;
     atual = listaEnc->inicio;
 
+
     while(atual != NULL){
         printf("\nnome excursao: %s", atual->nomeExcursao);
         printf("\ndestino: %s", atual->destino);
         atual = atual->proxExcursao;
+    }
+
+}
+void mostrarTurista(controlMutilista *listaEnc, char nomeExcursao[50]){
+    tipoExcursao *atual;
+    tipoTurista *prox;
+    atual = listaEnc->inicio;
+
+
+    while(strcmp(atual->nomeExcursao, nomeExcursao)!= 0){
+        atual = atual->proxExcursao;
+    }
+    prox = atual->inicioLista;
+
+    while(prox != NULL){
+        printf("nome: %s", prox->nome);
+        printf("cpf: %s", prox->cpf);
+        prox = prox->ProxNo;
     }
 
 }
@@ -159,6 +189,7 @@ int main(){
         printf("\n3- Adicionar excursao");
         printf("\n4- adicionar turistas");
         printf("\n5- remover excursao");
+        printf("\n6- mostrar turista");
         printf("\n9- Mostrar");
         scanf("%d", &opc);
 
@@ -195,12 +226,19 @@ int main(){
             printf("digite o nome da excursao que quer adicionar");
             scanf("%s", &nomeP);
 
-            adicionarTurista(nomeP,nomet,cpft,&multilista);
+            if(adicionarTurista(nomeP,nomet,cpft,&multilista)){
+                printf("\nO turista foi adicionado");
+            }
             break;
         case 5:
             printf("\ndigite o nome da excursao que quer remover:");
             scanf("%s", &nomeP);
             removerExcursao(nomeP,&multilista);
+            break;
+        case 6:
+            printf("\ndigite o nome da excursao que quer ver os dados do turistas:");
+            scanf("%s", &nomeP);
+            mostrarTurista(&multilista, nomeP);
             break;
         case 9:
             mostrar(&multilista);
