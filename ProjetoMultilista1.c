@@ -57,7 +57,7 @@ void removeTuristaFrente(controlMutilista *listaEnc, tipoExcursao* NoExcursao){
 
        while(atualturista != NULL){
         aux = atualturista;
-        listaEnc->inicio->quantidadeTurista--;
+        NoExcursao->quantidadeTurista--;
         atualturista = atualturista->ProxNo;
         free(aux);
        }
@@ -231,7 +231,7 @@ int removerFrente(tipoExcursao* atual, controlMutilista *listaEnc){
     listaEnc->inicio = atual->proxExcursao;
 
     //excluindo o no da lista de turistas
-    //removeTuristaFrente(listaEnc, atual);
+    removeTuristaFrente(listaEnc, atual);
 
 
 
