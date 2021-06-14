@@ -50,7 +50,25 @@ int estaVazia(controlMutilista *listaEnc){
     }
      return 0;
 }
+//criando destruir lista
+void destruirLista(controlMutilista *listaEnc){
+     tipoExcursao *auxExcursao, *apagarExcursao;
+     tipoTurista *auxTurista, *apagarTurista;
 
+     auxExcursao = listaEnc->inicio;
+
+     while(auxExcursao != NULL){
+
+        apagarExcursao = auxExcursao;
+        //removendo a lista de turistas
+        if(auxExcursao->inicioLista == NULL){
+        removeTuristaFrente(listaEnc, auxExcursao);
+        }
+        auxExcursao=auxExcursao->proxExcursao;
+        free(apagarExcursao);
+     }
+
+}
 void removeTuristaFrente(controlMutilista *listaEnc, tipoExcursao* NoExcursao){
        tipoTurista *aux, *atualturista;
        atualturista = NoExcursao->inicioLista;
@@ -278,6 +296,7 @@ void mostrar(controlMutilista *listaEnc){
     atual = listaEnc->inicio;
 
     printf("\nLista das Excursao:");
+    printf("\nQuantidade de Excursoes: %d", listaEnc->quantMultilsta);
     while(atual != NULL){
         printf("\n===== Excursao =====");
         printf("\nNome excursao: %s", atual->nomeExcursao);
@@ -285,7 +304,6 @@ void mostrar(controlMutilista *listaEnc){
         printf("\ndias da excursao: %d", atual->numDias);
         printf("\ndata: %d / %d / %d", atual->dataDia, atual->dataMes, atual->dataAno);
         printf("\nQuantidade de turista: %d", atual->quantidadeTurista);
-        printf("\nQuantidade multilista: %d", listaEnc->quantMultilsta);
 
         atual = atual->proxExcursao;
 
@@ -302,7 +320,8 @@ tipoExcursao* mostrarExcursao(controlMutilista *listaEnc, char nomeExcursao[70])
      atualTurista = atual->inicioLista;
 
      if(atual != NULL){
-        printf("\n===== Excursao: %s =====", atual->nomeExcursao);
+        printf("\n===== Excursao =====");
+        printf("\n=== %4s ===", atual->nomeExcursao);
         printf("\ndestino: %s", atual->destino);
         printf("\ndias da excursao: %d", atual->numDias);
         printf("\ndata: %d / %d / %d", atual->dataDia, atual->dataMes, atual->dataAno);
@@ -355,11 +374,11 @@ int main(){
         printf("\n3- Adicionar excursao");
         printf("\n4- adicionar turistas");
         printf("\n5- remover excursao");
-        printf("\n6- mostrar turista");
+        printf("\n6- Lista de turista");
         printf("\n7- remover turista");
         printf("\n8- Mostrar dados de excursao especifica");
-        printf("\n9- Mostrar");
-        printf("\n10- Esta vazia");
+        printf("\n9- Lista de excursoes");
+        printf("\n0- Para encerrar o progama");
         scanf("%d", &opc);
 
         switch(opc){
@@ -427,7 +446,7 @@ int main(){
             fgets(cpft, 50, stdin);
 
             setbuf(stdin, NULL);
-            printf("\nDigite o nome da excursao que quer adicionar");
+            printf("\nDigite o nome da excursao que quer adicionar:");
             fgets(nomeP, 70, stdin);
 
 
@@ -441,10 +460,10 @@ int main(){
         case 5:
             mostrar(&multilista);
             setbuf(stdin, NULL);
-            printf("\nNome da excursao:");
+            printf("\nDigite o Nome da excursao que deseja remover:");
             fgets(nomeP, 70, stdin);
             if(removerExcursao(nomeP,&multilista)== 0){
-                printf("\nO nome dessa excursao esta errado");
+                printf("\nEssa excursao nao existe ou o nome esta errado...");
             }else{
                 printf("\nRemovido com sucesso");
             }
@@ -496,21 +515,18 @@ int main(){
             }
             mostrar(&multilista);
             break;
-        case 10:
-            if(estaVazia(&multilista)== 1){
-                printf("\nNenhuma excursao, adicione alguma");
-            }else{
-                printf("\nPode adicionar");
-            }
-            break;
         default:
             printf("\nOpcao invalida");
             break;
         }
-
+         system("Pause");
+         system("cls");
 
     }while(opc != 0);
 
+    if(estaVazia(&multilista)== 0){
+      destruirLista(&multilista);
+    }
 
 
     return 0;
