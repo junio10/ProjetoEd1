@@ -29,8 +29,8 @@ void inicializaMultilista(controlMutilista *listaEnc);
 int estaVazia(controlMutilista *listaEnc);
 tipoExcursao *buscarExcursao(controlMutilista *listaEnc, char nomeExcursao[70]);
 int removerDeterminadoTurista(controlMutilista *listaEnc, char nomeExcursao[70], char nomeTurista[70]);
-int criarExcursao(controlMutilista *listaEnc, tipoExcursao *listaExcursao, char nome[70], char destino[70], int Numdias, int dia, int mes,int ano);
-int adicionarExcursao(controlMutilista *listaEnc, tipoExcursao *listaExcursao, char nome[70], char destino[70], int Numdias, int dia, int mes, int ano);
+int criarExcursao(controlMutilista *listaEnc, char nome[70], char destino[70], int Numdias, int dia, int mes,int ano);
+int adicionarExcursao(controlMutilista *listaEnc, char nome[70], char destino[70], int Numdias, int dia, int mes, int ano);
 int removerExcursao(char nomeExcursao[70], controlMutilista *listaEnc);
 int removerFrente(tipoExcursao *atual, controlMutilista *listaEnc);
 int adicionarTurista(char nomeExcursao[70],char nomeTurista[70], char cpf[50], controlMutilista *listaEnc);
@@ -146,7 +146,7 @@ int removerDeterminadoTurista(controlMutilista *listaEnc, char nomeExcursao[70],
 
 }
 }
-int criarExcursao(controlMutilista *listaEnc, tipoExcursao *listaExcursao, char nome[70], char destino[70], int Numdias, int dia, int mes, int ano){
+int criarExcursao(controlMutilista *listaEnc, char nome[70], char destino[70], int Numdias, int dia, int mes, int ano){
     tipoExcursao *novaExcursao;
     novaExcursao = malloc(sizeof(tipoExcursao));
     if(novaExcursao == NULL){
@@ -167,10 +167,10 @@ int criarExcursao(controlMutilista *listaEnc, tipoExcursao *listaExcursao, char 
 
     return 1;
 }
-int adicionarExcursao(controlMutilista *listaEnc, tipoExcursao *listaExcursao, char nome[70], char destino[70], int Numdias, int dia, int mes, int ano){
+int adicionarExcursao(controlMutilista *listaEnc,char nome[70], char destino[70], int Numdias, int dia, int mes, int ano){
     tipoExcursao *novaExcursao;
      if(listaEnc->inicio == NULL){
-        criarExcursao(listaEnc, listaExcursao, nome, destino, Numdias, dia, mes, ano);
+        criarExcursao(listaEnc, nome, destino, Numdias, dia, mes, ano);
         return 1;
     }
     novaExcursao = malloc(sizeof(tipoExcursao));
@@ -358,7 +358,7 @@ void mostrarTurista(controlMutilista *listaEnc, char nomeExcursao[70]){
 }
 int main(){
     controlMutilista multilista;
-    tipoExcursao excursao;
+
     tipoExcursao aux;
 
     char nomeP[70], nomet[70], cpft[30];
@@ -403,7 +403,7 @@ int main(){
             printf("\nAno: ");
             scanf("%d", &anoMain);
 
-            if(criarExcursao(&multilista, &excursao, nomeP, destinoP, diasP, diaMain, mesMain,anoMain)== 1 ){
+            if(criarExcursao(&multilista,nomeP, destinoP, diasP, diaMain, mesMain,anoMain)== 1 ){
                 printf("\nExcursao adicionada");
             }else{
                 printf("\nExcursao nao adicionada, tente novamente");
@@ -428,7 +428,7 @@ int main(){
             scanf("%d", &anoMain);
 
 
-            if(adicionarExcursao(&multilista, &excursao, nomeP, destinoP, diasP, diaMain, mesMain,anoMain)== 1 ){
+            if(adicionarExcursao(&multilista,nomeP, destinoP, diasP, diaMain, mesMain,anoMain)== 1 ){
                 printf("\nExcursao adicionada");
             }else{
                 printf("\nExcursao nao adicionada, tente novamente");
